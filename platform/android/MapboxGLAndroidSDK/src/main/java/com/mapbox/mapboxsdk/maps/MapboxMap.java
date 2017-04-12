@@ -28,6 +28,7 @@ import com.mapbox.mapboxsdk.annotations.Polygon;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.annotations.Polyline;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.mapboxsdk.camera.CameraOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -1519,6 +1520,15 @@ public final class MapboxMap {
    */
   public void setLatLngBoundsForCameraTarget(@Nullable LatLngBounds latLngBounds) {
     nativeMapView.setLatLngBounds(latLngBounds);
+  }
+
+  /**
+   * Gets a camera position that would fit a bounds.
+   *
+   * @param latLngBounds the bounds to constrain the map with
+   */
+  public CameraPosition getCameraForLatLngbounds(@Nullable LatLngBounds latLngBounds) {
+    return new CameraPosition.Builder(nativeMapView.getCameraForLatLngBounds(latLngBounds)).build();
   }
 
   //

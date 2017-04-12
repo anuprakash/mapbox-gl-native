@@ -45,6 +45,7 @@
 #include "run_loop_impl.hpp"
 #include "java/util.hpp"
 #include "geometry/lat_lng_bounds.hpp"
+#include "map/camera_options.hpp"
 
 namespace mbgl {
 namespace android {
@@ -447,6 +448,24 @@ jni::Object<LatLng> NativeMapView::getLatLng(JNIEnv& env) {
 
 void NativeMapView::setLatLng(jni::JNIEnv&, jni::jdouble latitude, jni::jdouble longitude, jni::jlong duration) {
     map->setLatLng(mbgl::LatLng(latitude, longitude), insets, mbgl::AnimationOptions{mbgl::Milliseconds(duration)});
+}
+
+jni::Array<jni::jdouble> NativeMapView::getCameraForLatLngBounds(jni::JNIEnv& env, jni::Object<LatLngBounds> jBounds) {
+    mbgl::CameraOptions cameraOptions = map->cameraForLatLngBounds(mbgl::android::LatLngBounds::getLatLngBounds(env, jBounds), insets);
+
+    jdouble buf[5];
+    mbgl::LatLng defaultValue;
+    mbgl::LatLng latLng = cameraOptions.center.value_or(defaultValue);
+    buf[0] = latLng.latitude();
+    buf[1] = latLng.longitude();
+    buf[2] = -cameraOptions.angle.value_or(0);
+    buf[3] = cameraOptions.pitch.value_or(0);
+    buf[4] = cameraOptions.zoom.value_or(0);
+
+    //Convert to Java array
+    auto output = jni::Array<jni::jdouble>::New(env, 5);
+    jni::SetArrayRegion(env, *output, 0, 5, buf);
+    return output;
 }
 
 void NativeMapView::setReachability(jni::JNIEnv&, jni::jboolean reachable) {
@@ -1492,6 +1511,7 @@ void NativeMapView::registerNative(jni::JNIEnv& env) {
             METHOD(&NativeMapView::flyTo, "nativeFlyTo"),
             METHOD(&NativeMapView::getLatLng, "nativeGetLatLng"),
             METHOD(&NativeMapView::setLatLng, "nativeSetLatLng"),
+            METHOD(&NativeMapView::getCameraForLatLngBounds, "nativeGetCameraForLatLngBounds"),
             METHOD(&NativeMapView::setReachability, "nativeSetReachability"),
             METHOD(&NativeMapView::resetPosition, "nativeResetPosition"),
             METHOD(&NativeMapView::getPitch, "nativeGetPitch"),

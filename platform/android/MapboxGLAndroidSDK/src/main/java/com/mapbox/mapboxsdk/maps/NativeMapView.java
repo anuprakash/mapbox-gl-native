@@ -17,6 +17,7 @@ import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.Polygon;
 import com.mapbox.mapboxsdk.annotations.Polyline;
+import com.mapbox.mapboxsdk.camera.CameraOptions;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
@@ -315,6 +316,13 @@ final class NativeMapView {
     }
     // wrap longitude values coming from core
     return nativeGetLatLng().wrap();
+  }
+
+  public double[] getCameraForLatLngBounds(LatLngBounds latLngBounds) {
+    if(isDestroyedOn("getCameraForLatLngBounds")){
+      return null;
+    }
+    return nativeGetCameraForLatLngBounds(latLngBounds);
   }
 
   public void resetPosition() {
@@ -969,6 +977,8 @@ final class NativeMapView {
   private native void nativeSetLatLng(double latitude, double longitude, long duration);
 
   private native LatLng nativeGetLatLng();
+
+  private native double[] nativeGetCameraForLatLngBounds(LatLngBounds latLngBounds);
 
   private native void nativeResetPosition();
 

@@ -23,6 +23,7 @@
 #include "style/layers/layers.hpp"
 #include "style/sources/sources.hpp"
 #include "geometry/lat_lng_bounds.hpp"
+#include "map/camera_options.hpp"
 
 #include <exception>
 #include <string>
@@ -128,6 +129,8 @@ public:
     jni::Object<LatLng> getLatLng(JNIEnv&);
 
     void setLatLng(jni::JNIEnv&, jni::jdouble, jni::jdouble, jni::jlong);
+
+    jni::Array<jni::jdouble> getCameraForLatLngBounds(jni::JNIEnv&, jni::Object<mbgl::android::LatLngBounds>);
 
     void setReachability(jni::JNIEnv&, jni::jboolean);
 
