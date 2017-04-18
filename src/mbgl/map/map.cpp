@@ -9,6 +9,7 @@
 #include <mbgl/style/style.hpp>
 #include <mbgl/style/source.hpp>
 #include <mbgl/style/layer.hpp>
+#include <mbgl/style/light.hpp>
 #include <mbgl/style/observer.hpp>
 #include <mbgl/style/transition_options.hpp>
 #include <mbgl/style/update_parameters.hpp>
@@ -976,6 +977,14 @@ const SpriteImage* Map::getImage(const std::string& name) {
         return impl->style->spriteAtlas->getSprite(name).get();
     }
     return nullptr;
+}
+
+void Map::setLight(std::unique_ptr<style::Light> light) {
+    if (!impl->style) {
+        return;
+    }
+
+    impl->style->light = *light;
 }
 
 #pragma mark - Defaults

@@ -30,6 +30,7 @@ class SpriteImage;
 namespace style {
 class Source;
 class Layer;
+class Light;
 } // namespace style
 
 class Map : private util::noncopyable {
@@ -178,6 +179,9 @@ public:
     void addImage(const std::string&, std::unique_ptr<const SpriteImage>);
     void removeImage(const std::string&);
     const SpriteImage* getImage(const std::string&);
+
+    // Light
+    void setLight(std::unique_ptr<style::Light>);
 
     // Defaults
     std::string getStyleName() const;
